@@ -72,7 +72,7 @@ const accordion = () => {
         };
 
         const closeAllDrop = (btn, dropDown) => {
-            characteristicsItem.forEach(elem => {
+            characteristicsItem.forEach((elem, i) => {
                 if(elem.children[0] !== btn && elem.children[1] !== dropDown) {
                     close(elem.children[0], elem.children[1]);
                 }
@@ -98,16 +98,40 @@ const modal = () => {
     const  modal = document.querySelector('.modal'),
         cardDetailsButtonBuy = document.querySelector('.card-details__button_buy'),
         cardDetailsButtonDelivery = document.querySelector('.card-details__button_delivery'),
-        modalSubtitle= modal.querySelector('.modal__subtitle');
+        modalSubtitle= modal.querySelector('.modal__subtitle'),
+        cardDetailsTitle = document.querySelector('.card-details__title'),
+        modalTitle = modal.querySelector('.modal__title');
+        
+        console.log(modalTitle);
+
+        const escapeHandler = (e) => {
+            console.log('Допилить окно');
+            if(e.code === 'Escape') {
+                    modal.classList.remove('open');
+            }
+        }
+    
+        const openModal = () => {
+
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            modalTitle.textContent = cardDetailsTitle.textContent;
+            document.addEventListener('keydown', escapeHandler) 
+
+        }
+
+        const closeModal = () => {
+            modal.classList.remove('open');
+                document.body.style.overflow = '';
+            document.removeEventListener('keydown', escapeHandler) 
+
+        }
         
 
-       
-
-       const  btnOpenModal = (btn) => {
-        btn.addEventListener('click', () => {
-            modal.classList.add('open');
-            modalSubtitle.textContent = btn === cardDetailsButtonBuy ? 'Оплата' : 'Доставка и оплата'
-            document.body.style.overflow = 'hidden';
+        const  btnOpenModal = (btn) => {
+            btn.addEventListener('click', () => {
+                openModal();
+                modalSubtitle.textContent = btn === cardDetailsButtonBuy ? 'Оплата' : 'Доставка и оплата'
         })
         }
 
@@ -116,13 +140,8 @@ const modal = () => {
 
         modal.addEventListener('click', (e) => {
             if(e.target && e.target.classList.contains('modal__close') || e.target.classList.contains('open') ){
-                modal.classList.remove('open');
-                document.body.style.overflow = '';
-
-                
-
+                closeModal();
             }
-            
         })
 }
     
